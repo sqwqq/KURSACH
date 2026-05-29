@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Вход в админ-панель";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-shield-lock me-2"></i>Админ-панель
+                </h4>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>@ViewBag.Error
+                    </div>
+                }
+                
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">Логин</label>
+                        <input type="text" name="login" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+                    </button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small class="text-muted">Логин: admin | Пароль: admin123</small>
+            </div>
+        </div>
+    </div>
+</div>

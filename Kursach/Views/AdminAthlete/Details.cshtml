@@ -1,0 +1,82 @@
+@model Kursach.Models.Athlete
+
+@{
+    ViewData["Title"] = Model.FirstName + " " + Model.LastName;
+}
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow">
+            @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+            {
+                <img src="@Model.PhotoUrl" class="card-img-top" alt="@Model.FirstName @Model.LastName" style="height: 300px; object-fit: cover;">
+            }
+            else
+            {
+                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
+                    <span class="text-white display-1">@(Model.FirstName[0])@(Model.LastName[0])</span>
+                </div>
+            }
+            <div class="card-body">
+                <h4>@Model.FirstName @Model.LastName</h4>
+                <p class="text-muted">@Model.Group</p>
+                <p><strong>Команда:</strong> @(Model.Team?.Name)</p>
+                <p><strong>Вид спорта:</strong> @(Model.Team?.SportType)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card border-0 shadow mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Информация</h5>
+            </div>
+            <div class="card-body">
+                <p>@Model.Bio</p>
+                <div class="row">
+                    <div class="col-6">
+                        <p><strong>Рост:</strong> @Model.Height см</p>
+                    </div>
+                    <div class="col-6">
+                        <p><strong>Вес:</strong> @Model.Weight кг</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        @if (Model.Achievements.Any())
+        {
+            <div class="card border-0 shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Достижения (@Model.Achievements.Count)</h5>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Место</th>
+                                <th>Дата</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var a in Model.Achievements)
+                            {
+                                <tr>
+                                    <td>@a.Title</td>
+                                    <td>@a.Place</td>
+                                    <td>@a.Date.ToString("dd.MM.yyyy")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Назад к списку
+    </a>
+</div>

@@ -1,0 +1,74 @@
+@{
+    ViewData["Title"] = "Админ-панель";
+}
+
+<div class="page-header" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+    <div class="container">
+        <span class="badge bg-warning text-dark mb-2 fs-6 px-3 py-1">Панель управления</span>
+        <h1 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Админ-панель</h1>
+    </div>
+</div>
+
+<div class="container">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm border-0" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                <span>@TempData["Success"]</span>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    }
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 100px; height: 100px; background: #eef2ff;">
+                        <i class="bi bi-people display-3 text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold">Спортсмены</h4>
+                    <p class="text-muted small">Управление спортсменами</p>
+                    <a asp-controller="AdminAthlete" asp-action="Index" class="btn btn-primary rounded-pill px-4">
+                        <i class="bi bi-gear me-1"></i>Управление
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 100px; height: 100px; background: #fffbeb;">
+                        <i class="bi bi-trophy display-3 text-warning"></i>
+                    </div>
+                    <h4 class="fw-bold">Достижения</h4>
+                    <p class="text-muted small">Управление достижениями</p>
+                    <a asp-controller="AdminAchievement" asp-action="Index" class="btn btn-warning rounded-pill px-4">
+                        <i class="bi bi-gear me-1"></i>Управление
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 100px; height: 100px; background: #ecfeff;">
+                        <i class="bi bi-newspaper display-3 text-info"></i>
+                    </div>
+                    <h4 class="fw-bold">Новости</h4>
+                    <p class="text-muted small">Управление новостями</p>
+                    <a asp-controller="AdminNews" asp-action="Index" class="btn btn-info text-white rounded-pill px-4">
+                        <i class="bi bi-gear me-1"></i>Управление
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary rounded-pill px-5">
+            <i class="bi bi-arrow-left me-1"></i>Вернуться на сайт
+        </a>
+    </div>
+</div>

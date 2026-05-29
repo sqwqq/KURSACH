@@ -1,0 +1,191 @@
+@model Kursach.Models.Athlete
+@{
+    var totalAchievements = Model.Achievements?.Count() ?? 0;
+    var firstPlaces = Model.Achievements?.Count(a => a.Place.Contains("1")) ?? 0;
+    var secondPlaces = Model.Achievements?.Count(a => a.Place.Contains("2")) ?? 0;
+    var thirdPlaces = Model.Achievements?.Count(a => a.Place.Contains("3")) ?? 0;
+}
+
+<div class="page-header" style="background: linear-gradient(135deg, #1a2a5e, #1e3c72);">
+    <div class="container">
+        <a asp-action="Index" class="btn btn-outline-light btn-sm rounded-pill mb-3">
+            <i class="bi bi-arrow-left me-1"></i>Назад к списку
+        </a>
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-warning text-dark mb-2 fs-6 px-3 py-1">@Model.Team?.SportType</span>
+                <h1 class="mb-1">@Model.FirstName @Model.LastName</h1>
+                <p class="text-white-50 mb-0"><i class="bi bi-people me-1"></i>@Model.Group <span class="mx-2">|</span> <i class="bi bi-flag me-1"></i>@Model.Team?.Name</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="position-relative">
+                    @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                    {
+                        <img src="@Model.PhotoUrl" class="card-img-top" alt="@Model.FirstName @Model.LastName" style="height: 350px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 350px; background: linear-gradient(135deg, #1e3c72, #2a5298);">
+                            <span class="text-white display-1 fw-bold">@(Model.FirstName[0])@(Model.LastName[0])</span>
+                        </div>
+                    }
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.Bio))
+                    {
+                        <p class="card-text text-muted">@Model.Bio</p>
+                        <hr>
+                    }
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="text-center p-3 bg-light rounded-3">
+                                <h4 class="mb-0 fw-bold text-primary">@Model.Height</h4>
+                                <small class="text-muted">Рост (см)</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center p-3 bg-light rounded-3">
+                                <h4 class="mb-0 fw-bold text-primary">@Model.Weight</h4>
+                                <small class="text-muted">Вес (кг)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="stats-section p-3 rounded-3 mb-4">
+                <div class="row g-3">
+                    <div class="col-md-3 col-6">
+                        <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+                            <div class="card-body text-center position-relative">
+                                <span class="position-absolute top-0 end-0 badge bg-light text-primary m-2 px-2" style="font-size: 0.65rem;">
+                                    <i class="bi bi-trophy me-1"></i>Все
+                                </span>
+                                <i class="bi bi-award display-5 mb-2 text-white-50"></i>
+                                <h3 class="mb-0 fw-bold text-white">@totalAchievements</h3>
+                                <small class="text-white-50">Всего достижений</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                            <div class="card-body text-center position-relative">
+                                <span class="position-absolute top-0 end-0 badge bg-dark m-2 px-2" style="font-size: 0.65rem; opacity: 0.75;">
+                                    <i class="bi bi-trophy-fill me-1" style="color: #f59e0b;"></i>1
+                                </span>
+                                <i class="bi bi-trophy-fill display-5 mb-2 text-dark" style="opacity: 0.6;"></i>
+                                <h3 class="mb-0 fw-bold text-dark">@firstPlaces</h3>
+                                <small class="text-dark" style="opacity: 0.7;">Первых мест</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #9ca3af, #d1d5db);">
+                            <div class="card-body text-center position-relative">
+                                <span class="position-absolute top-0 end-0 badge bg-dark m-2 px-2" style="font-size: 0.65rem; opacity: 0.75;">
+                                    <i class="bi bi-star-fill me-1" style="color: #d1d5db;"></i>2
+                                </span>
+                                <i class="bi bi-star-fill display-5 mb-2 text-dark" style="opacity: 0.5;"></i>
+                                <h3 class="mb-0 fw-bold text-dark">@secondPlaces</h3>
+                                <small class="text-dark" style="opacity: 0.7;">Вторых мест</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #b91c1c, #ef4444);">
+                            <div class="card-body text-center position-relative">
+                                <span class="position-absolute top-0 end-0 badge bg-dark m-2 px-2" style="font-size: 0.65rem; opacity: 0.75;">
+                                    <i class="bi bi-award-fill me-1" style="color: #ef4444;"></i>3
+                                </span>
+                                <i class="bi bi-award-fill display-5 mb-2 text-white-50"></i>
+                                <h3 class="mb-0 fw-bold text-white">@thirdPlaces</h3>
+                                <small class="text-white-50">Третьих мест</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-trophy text-warning me-2"></i>Достижения спортсмена
+                    </h4>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Achievements != null && Model.Achievements.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">Название</th>
+                                        <th>Вид спорта</th>
+                                        <th>Место</th>
+                                        <th>Дата</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var achievement in Model.Achievements.OrderByDescending(a => a.Date))
+                                    {
+                                        <tr>
+                                            <td class="ps-4 fw-bold">@achievement.Title</td>
+                                            <td><span class="badge bg-light text-dark border rounded-pill">@achievement.SportType</span></td>
+                                            <td>
+                                                @if (achievement.Place.Contains("1"))
+                                                {
+                                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                                                        <i class="bi bi-trophy-fill me-1"></i>@achievement.Place
+                                                    </span>
+                                                }
+                                                else if (achievement.Place.Contains("2"))
+                                                {
+                                                    <span class="badge rounded-pill px-3 py-2" style="background: linear-gradient(135deg, #9ca3af, #d1d5db); color: #1f2937;">
+                                                        <i class="bi bi-star-fill me-1"></i>@achievement.Place
+                                                    </span>
+                                                }
+                                                else if (achievement.Place.Contains("3"))
+                                                {
+                                                    <span class="badge bg-danger rounded-pill px-3 py-2">
+                                                        <i class="bi bi-award-fill me-1"></i>@achievement.Place
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-info rounded-pill px-3 py-2">@achievement.Place</span>
+                                                }
+                                            </td>
+                                            <td><small class="text-muted"><i class="bi bi-calendar me-1"></i>@achievement.Date.ToString("dd.MM.yyyy")</small></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-trophy display-1 text-muted"></i>
+                            <p class="text-muted mt-3">Нет достижений</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stats-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+</style>

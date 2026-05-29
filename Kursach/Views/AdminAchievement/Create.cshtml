@@ -1,0 +1,70 @@
+@model Kursach.Models.Achievement
+
+@{
+    ViewData["Title"] = "Добавить достижение";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow">
+            <div class="card-header bg-warning">
+                <h4 class="mb-0">
+                    <i class="bi bi-plus-circle me-2"></i>Добавить достижение
+                </h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">Название</label>
+                        <input asp-for="Title" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Вид спорта</label>
+                                <select asp-for="SportType" class="form-select" asp-items="ViewBag.SportTypes" required>
+                                    <option value="">-- Выберите --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Место</label>
+                                <input asp-for="Place" class="form-control" placeholder="1 место" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Дата</label>
+                                <input asp-for="Date" class="form-control" type="date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Команда</label>
+                                <select asp-for="TeamId" class="form-select" asp-items="ViewBag.Teams">
+                                    <option value="">-- Выберите --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Спортсмен</label>
+                        <select asp-for="AthleteId" class="form-select" asp-items="ViewBag.Athletes">
+                            <option value="">-- Выберите --</option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-check-lg me-1"></i>Сохранить
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

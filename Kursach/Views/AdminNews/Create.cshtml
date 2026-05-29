@@ -1,0 +1,72 @@
+@model Kursach.Models.News
+
+@{
+    ViewData["Title"] = "Добавить новость";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-plus-circle me-2"></i>Добавить новость
+                </h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">Заголовок</label>
+                        <input asp-for="Title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Содержание</label>
+                        <textarea asp-for="Content" class="form-control" rows="5" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Дата</label>
+                                <input asp-for="Date" class="form-control" type="date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Категория</label>
+                                <select asp-for="Category" class="form-select" asp-items="ViewBag.Categories" required>
+                                    <option value="">-- Выберите --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Изображение (URL)</label>
+                                <input asp-for="ImageUrl" class="form-control" placeholder="https://example.com/image.jpg">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Связанный спортсмен</label>
+                                <select asp-for="AthleteId" class="form-select" asp-items="ViewBag.Athletes">
+                                    <option value="">-- Выберите --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input asp-for="IsFeatured" class="form-check-input" type="checkbox">
+                        <label class="form-check-label">Избранная новость</label>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-info text-white">
+                            <i class="bi bi-check-lg me-1"></i>Сохранить
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

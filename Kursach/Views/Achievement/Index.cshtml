@@ -1,0 +1,123 @@
+@model IEnumerable<Kursach.Models.Achievement>
+
+<div class="page-header" style="background: linear-gradient(135deg, #b45309, #d97706);">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <span class="badge bg-light text-dark mb-2 fs-6 px-3 py-1">Наши достижения</span>
+                <h1 class="mb-0"><i class="bi bi-award me-2"></i>Достижения</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-3">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-sport me-1"></i>Вид спорта</label>
+                        <select name="sportType" class="form-select" asp-items="ViewBag.SportTypes">
+                            <option value="">Все виды спорта</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-people me-1"></i>Спортсмен</label>
+                        <select name="athleteId" class="form-select" asp-items="ViewBag.Athletes">
+                            <option value="">Все спортсмены</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-warning w-100">
+                            <i class="bi bi-filter me-1"></i>Фильтр
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary w-100">Сброс</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center py-5">
+            <i class="bi bi-award display-4 d-block mb-3 text-muted"></i>
+            <h4 class="fw-bold">Достижения не найдены</h4>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4" style="min-width: 200px;">Название</th>
+                        <th style="min-width: 120px;">Вид спорта</th>
+                        <th style="min-width: 100px;">Место</th>
+                        <th style="min-width: 100px;">Дата</th>
+                        <th class="pe-4" style="min-width: 180px;">Спортсмен</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var achievement in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold">@achievement.Title</td>
+                            <td><span class="badge bg-primary rounded-pill">@achievement.SportType</span></td>
+                            <td>
+                                @if (achievement.Place.Contains("1"))
+                                {
+                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                                        <i class="bi bi-trophy-fill me-1"></i>@achievement.Place
+                                    </span>
+                                }
+                                else if (achievement.Place.Contains("2"))
+                                {
+                                    <span class="badge rounded-pill px-3 py-2" style="background: linear-gradient(135deg, #9ca3af, #d1d5db); color: #1f2937;">
+                                        <i class="bi bi-star-fill me-1"></i>@achievement.Place
+                                    </span>
+                                }
+                                else if (achievement.Place.Contains("3"))
+                                {
+                                    <span class="badge bg-danger rounded-pill px-3 py-2">
+                                        <i class="bi bi-award-fill me-1"></i>@achievement.Place
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info rounded-pill px-3 py-2">@achievement.Place</span>
+                                }
+                            </td>
+                            <td><small class="text-muted"><i class="bi bi-calendar me-1"></i>@achievement.Date.ToString("dd.MM.yyyy")</small></td>
+                            <td class="pe-4">
+                                @if (achievement.Athlete != null)
+                                {
+                                    <a asp-controller="Athlete" asp-action="Details" asp-route-id="@achievement.Athlete.Id" class="text-decoration-none d-flex align-items-center gap-2">
+                                        @if (!string.IsNullOrEmpty(achievement.Athlete.PhotoUrl))
+                                        {
+                                            <img src="@achievement.Athlete.PhotoUrl" alt="" class="rounded-circle shadow-sm" style="width: 36px; height: 36px; object-fit: cover;">
+                                        }
+                                        else
+                                        {
+                                            <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary" style="width: 36px; height: 36px;">
+                                                <span class="text-white small fw-bold">@achievement.Athlete.FirstName[0]@achievement.Athlete.LastName[0]</span>
+                                            </div>
+                                        }
+                                        <span class="fw-bold text-dark small">@achievement.Athlete.FirstName @achievement.Athlete.LastName</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+@model Kursach.Models.News
+
+<div class="page-header" style="background: linear-gradient(135deg, #0e7490, #0891b2);">
+    <div class="container">
+        <a asp-action="Index" class="btn btn-outline-light btn-sm rounded-pill mb-3">
+            <i class="bi bi-arrow-left me-1"></i>Назад к новостям
+        </a>
+        <h1 class="mb-0">@Model.Title</h1>
+    </div>
+</div>
+
+<div class="container">
+    <article>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="rounded-4 overflow-hidden shadow-sm mb-4">
+                <img src="@Model.ImageUrl" class="img-fluid w-100" alt="@Model.Title" style="max-height: 450px; object-fit: cover;">
+            </div>
+        }
+        
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="badge bg-primary fs-6 px-3 py-2">@Model.Category</span>
+            <small class="text-muted align-self-center">
+                <i class="bi bi-calendar3 me-1"></i>@Model.Date.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("ru-RU"))
+            </small>
+            @if (Model.IsFeatured)
+            {
+                <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                    <i class="bi bi-star-fill me-1"></i>Важное
+                </span>
+            }
+        </div>
+        
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <p class="card-text" style="font-size: 1.15rem; line-height: 1.9;">@Model.Content</p>
+            </div>
+        </div>
+
+        @if (Model.Athlete != null)
+        {
+            <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+                <div class="card-header bg-gradient text-white py-3" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                    <h5 class="mb-0"><i class="bi bi-person-heart me-2"></i>Герой новости</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row align-items-center g-3">
+                        <div class="col-auto">
+                            @if (!string.IsNullOrEmpty(Model.Athlete.PhotoUrl))
+                            {
+                                <img src="@Model.Athlete.PhotoUrl" alt="@Model.Athlete.FirstName @Model.Athlete.LastName" 
+                                     class="rounded-circle shadow-sm" style="width: 100px; height: 100px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary shadow-sm" 
+                                     style="width: 100px; height: 100px;">
+                                    <span class="text-white display-5 fw-bold">@(Model.Athlete.FirstName[0])@(Model.Athlete.LastName[0])</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="col">
+                            <h4 class="mb-1 fw-bold">@Model.Athlete.FirstName @Model.Athlete.LastName</h4>
+                            <p class="text-muted mb-2">
+                                <i class="bi bi-people me-1"></i>@Model.Athlete.Group
+                                <span class="mx-2">|</span>
+                                <i class="bi bi-sport me-1"></i>@Model.Athlete.Team?.SportType
+                            </p>
+                            @if (!string.IsNullOrEmpty(Model.Athlete.Bio))
+                            {
+                                <p class="text-muted small mb-2">@Model.Athlete.Bio</p>
+                            }
+                            <a asp-controller="Athlete" asp-action="Details" asp-route-id="@Model.Athlete.Id" class="btn btn-primary rounded-pill fw-bold">
+                                <i class="bi bi-person me-1"></i>Перейти к профилю
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        
+        <div class="text-center mt-4">
+            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-5">
+                <i class="bi bi-arrow-left me-1"></i>Все новости
+            </a>
+        </div>
+    </article>
+</div>
+
