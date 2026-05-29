@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow">
+        <div class="card">
             @if (!string.IsNullOrEmpty(Model.PhotoUrl))
             {
                 <img src="@Model.PhotoUrl" class="card-img-top" alt="@Model.FirstName @Model.LastName" style="height: 300px; object-fit: cover;">
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="col-md-8">
-        <div class="card border-0 shadow mb-4">
+        <div class="card mb-4">
             <div class="card-header">
                 <h5 class="mb-0">Информация</h5>
             </div>
@@ -45,7 +45,7 @@
         
         @if (Model.Achievements.Any())
         {
-            <div class="card border-0 shadow">
+            <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">Достижения (@Model.Achievements.Count)</h5>
                 </div>

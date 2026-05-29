@@ -1,8 +1,8 @@
 @model Kursach.Models.News
 
-<div class="page-header" style="background: linear-gradient(135deg, #0e7490, #0891b2);">
+<div class="page-header">
     <div class="container">
-        <a asp-action="Index" class="btn btn-outline-light btn-sm rounded-pill mb-3">
+        <a asp-action="Index" class="btn btn-outline-light btn-sm mb-3">
             <i class="bi bi-arrow-left me-1"></i>Назад к новостям
         </a>
         <h1 class="mb-0">@Model.Title</h1>
@@ -13,7 +13,7 @@
     <article>
         @if (!string.IsNullOrEmpty(Model.ImageUrl))
         {
-            <div class="rounded-4 overflow-hidden shadow-sm mb-4">
+            <div class="mb-4">
                 <img src="@Model.ImageUrl" class="img-fluid w-100" alt="@Model.Title" style="max-height: 450px; object-fit: cover;">
             </div>
         }
@@ -31,7 +31,7 @@
             }
         </div>
         
-        <div class="card border-0 shadow-sm mb-4">
+        <div class="card mb-4">
             <div class="card-body p-4">
                 <p class="card-text" style="font-size: 1.15rem; line-height: 1.9;">@Model.Content</p>
             </div>
@@ -39,8 +39,8 @@
 
         @if (Model.Athlete != null)
         {
-            <div class="card border-0 shadow-sm mb-4 overflow-hidden">
-                <div class="card-header bg-gradient text-white py-3" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white py-3">
                     <h5 class="mb-0"><i class="bi bi-person-heart me-2"></i>Герой новости</h5>
                 </div>
                 <div class="card-body p-4">
@@ -49,11 +49,11 @@
                             @if (!string.IsNullOrEmpty(Model.Athlete.PhotoUrl))
                             {
                                 <img src="@Model.Athlete.PhotoUrl" alt="@Model.Athlete.FirstName @Model.Athlete.LastName" 
-                                     class="rounded-circle shadow-sm" style="width: 100px; height: 100px; object-fit: cover;">
+                                     class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
                             }
                             else
                             {
-                                <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary shadow-sm" 
+                                <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary" 
                                      style="width: 100px; height: 100px;">
                                     <span class="text-white display-5 fw-bold">@(Model.Athlete.FirstName[0])@(Model.Athlete.LastName[0])</span>
                                 </div>
@@ -70,7 +70,7 @@
                             {
                                 <p class="text-muted small mb-2">@Model.Athlete.Bio</p>
                             }
-                            <a asp-controller="Athlete" asp-action="Details" asp-route-id="@Model.Athlete.Id" class="btn btn-primary rounded-pill fw-bold">
+                            <a asp-controller="Athlete" asp-action="Details" asp-route-id="@Model.Athlete.Id" class="btn btn-primary fw-bold">
                                 <i class="bi bi-person me-1"></i>Перейти к профилю
                             </a>
                         </div>
@@ -80,10 +80,9 @@
         }
         
         <div class="text-center mt-4">
-            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-5">
+            <a asp-action="Index" class="btn btn-outline-secondary px-5">
                 <i class="bi bi-arrow-left me-1"></i>Все новости
             </a>
         </div>
     </article>
 </div>
-
