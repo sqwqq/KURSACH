@@ -1,5 +1,6 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Kursach.Models
+@using System.Linq
 @{
     ViewData["Title"] = "Главная";
     var topAthletes = ViewBag.TopAthletes as IEnumerable<Athlete> ?? Enumerable.Empty<Athlete>();
@@ -8,63 +9,73 @@
     dynamic stats = ViewBag.Stats;
 }
 
-<!-- Hero -->
-<div class="position-relative text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);">
-    <div class="position-absolute top-0 end-0 w-50 h-100 opacity-10 d-none d-md-block" style="background: radial-gradient(circle at center, #f59e0b 0%, transparent 70%);"></div>
-    <div class="container py-5 position-relative">
-        <div class="row align-items-center min-vh-50">
-            <div class="col-lg-7">
+<!-- Hero Section -->
+<div class="position-relative text-white" style="background: linear-gradient(135deg, #0b1120 0%, #1a2332 50%, #0b1120 100%); min-height: 70vh; display: flex; align-items: center;">
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(245,158,11,0.03)" stroke-width="0.5"/></svg>') repeat; background-size: 60px 60px; opacity: 0.5; pointer-events: none;"></div>
+    <div class="position-absolute" style="top: 10%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%); border-radius: 50%;"></div>
+    <div class="container position-relative">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7" data-aos="fade-right">
                 <div class="mb-4">
-                    <span class="badge bg-warning text-dark px-3 py-2 mb-3">Добро пожаловать</span>
-                    <h1 class="display-4 fw-bold mb-3 lh-1">Спортивные<br>достижения колледжа</h1>
-                    <p class="lead mb-0 text-white-50" style="max-width: 500px;">Мы гордимся нашими спортсменами, которые достигают вершин мастерства в различных видах спорта</p>
+                    <span class="badge bg-accent px-3 py-2 mb-3 d-inline-flex align-items-center gap-2" style="background: rgba(245,158,11,0.15); color: var(--accent); border: 1px solid rgba(245,158,11,0.2);">
+                        <i class="bi bi-lightning-fill"></i> PGEC Sports
+                    </span>
+                    <h1 class="display-3 fw-bold mb-3 lh-1" style="letter-spacing: -1px;">
+                        Спортивные<br>
+                        <span style="background: linear-gradient(135deg, var(--accent), #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">достижения</span> колледжа
+                    </h1>
+                    <p class="lead mb-4 text-white-50" style="max-width: 500px; font-weight: 400;">Мы гордимся нашими спортсменами, которые достигают вершин мастерства в различных видах спорта</p>
                 </div>
                 <div class="d-flex flex-wrap gap-3">
-                    <a asp-controller="Athlete" class="btn btn-warning fw-bold px-4 py-2">
-                        <i class="bi bi-people me-2"></i>Наши спортсмены
+                    <a asp-controller="Athlete" class="btn btn-warning fw-bold px-4 py-2 d-flex align-items-center gap-2">
+                        Наши спортсмены <i class="bi bi-arrow-right"></i>
                     </a>
-                    <a asp-controller="Achievement" class="btn btn-outline-light fw-bold px-4 py-2">
-                        <i class="bi bi-trophy me-2"></i>Достижения
+                    <a asp-controller="Achievement" class="btn fw-bold px-4 py-2 d-flex align-items-center gap-2" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: white;">
+                        <i class="bi bi-trophy"></i> Достижения
                     </a>
                 </div>
             </div>
-            <div class="col-lg-5 d-none d-lg-flex justify-content-center">
-                <div style="width: 280px; height: 280px; background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <i class="bi bi-trophy" style="font-size: 8rem; color: rgba(245,158,11,0.3);"></i>
+            <div class="col-lg-5 d-none d-lg-flex justify-content-center" data-aos="fade-left" data-aos-delay="200">
+                <div class="position-relative" style="width: 320px; height: 320px;">
+                    <div style="width: 320px; height: 320px; background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.03)); border-radius: 50%; border: 1px solid rgba(245,158,11,0.15); display: flex; align-items: center; justify-content: center;">
+                        <div style="width: 240px; height: 240px; background: linear-gradient(135deg, rgba(245,158,11,0.08), transparent); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-trophy-fill" style="font-size: 7rem; color: rgba(245,158,11,0.2);"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Stats -->
-<div class="bg-white shadow-sm py-4">
-    <div class="container">
-        <div class="row text-center g-3">
-            <div class="col-4">
-                <div class="py-2">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-2" style="width: 50px; height: 50px; background: #eef2ff;">
-                        <i class="bi bi-people-fill fs-3 text-primary"></i>
+<!-- Stats Strip -->
+<div class="bg-white" style="border-bottom: 1px solid rgba(0,0,0,0.04);">
+    <div class="container py-4">
+        <div class="row g-4">
+            <div class="col-4" data-aos="fade-up" data-aos-delay="0">
+                <div class="text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-2" style="width: 48px; height: 48px; background: linear-gradient(135deg, #eef2ff, #e0e7ff);">
+                        <i class="bi bi-people-fill text-primary"></i>
                     </div>
-                    <h3 class="fw-bold mb-0 display-5">@(stats?.TotalAthletes ?? 0)</h3>
+                    <h3 class="fw-bold mb-0 display-5" style="color: var(--dark);">@(stats?.TotalAthletes ?? 0)</h3>
                     <small class="text-muted">Спортсменов</small>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="py-2">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-2" style="width: 50px; height: 50px; background: #fffbeb;">
-                        <i class="bi bi-award-fill fs-3 text-warning"></i>
+            <div class="col-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-2" style="width: 48px; height: 48px; background: linear-gradient(135deg, #fffbeb, #fef3c7);">
+                        <i class="bi bi-trophy-fill text-warning"></i>
                     </div>
-                    <h3 class="fw-bold mb-0 display-5">@(stats?.TotalAchievements ?? 0)</h3>
+                    <h3 class="fw-bold mb-0 display-5" style="color: var(--dark);">@(stats?.TotalAchievements ?? 0)</h3>
                     <small class="text-muted">Достижений</small>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="py-2">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-2" style="width: 50px; height: 50px; background: #ecfdf5;">
-                        <i class="bi bi-flag-fill fs-3 text-success"></i>
+            <div class="col-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-2" style="width: 48px; height: 48px; background: linear-gradient(135deg, #ecfdf5, #d1fae5);">
+                        <i class="bi bi-flag-fill text-success"></i>
                     </div>
-                    <h3 class="fw-bold mb-0 display-5">@(stats?.TotalTeams ?? 0)</h3>
+                    <h3 class="fw-bold mb-0 display-5" style="color: var(--dark);">@(stats?.TotalTeams ?? 0)</h3>
                     <small class="text-muted">Команд</small>
                 </div>
             </div>
@@ -77,11 +88,11 @@
     <!-- Featured News -->
     @if (featuredNews.Any())
     {
-        <section class="mb-5">
-            <div class="d-flex align-items-center gap-2 mb-4">
-                <i class="bi bi-star-fill text-warning fs-3"></i>
-                <h2 class="fw-bold mb-0">Избранные новости</h2>
-                <div class="flex-grow-1" style="height: 1px; background: linear-gradient(90deg, #e9ecef, transparent);"></div>
+        <section class="mb-5" data-aos="fade-up">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <i class="bi bi-star-fill text-warning fs-4"></i>
+                <h2 class="fw-bold mb-0" style="color: var(--dark);">Избранные новости</h2>
+                <div class="section-line"></div>
             </div>
             <div class="row">
                 @foreach (var featured in featuredNews)
@@ -99,7 +110,7 @@
                                 <h4 class="card-title fw-bold">@featured.Title</h4>
                                 <p class="card-text text-muted flex-grow-1">@(featured.Content.Length > 120 ? featured.Content.Substring(0, 120) + "..." : featured.Content)</p>
                                 <a asp-controller="News" asp-action="Details" asp-route-id="@featured.Id" class="btn btn-warning fw-bold align-self-start">
-                                    Читать далее <i class="bi bi-arrow-right ms-1"></i>
+                                    Читать <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
                             </div>
                         </div>
@@ -110,65 +121,72 @@
     }
 
     <!-- Top Athletes -->
-    <section class="mb-5">
+    <section class="mb-5" data-aos="fade-up">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-person-badge text-primary fs-3"></i>
-                <h2 class="fw-bold mb-0">Лучшие спортсмены</h2>
-                <div style="width: 40px; height: 1px; background: linear-gradient(90deg, #e9ecef, transparent);"></div>
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-person-badge text-primary fs-4"></i>
+                <h2 class="fw-bold mb-0" style="color: var(--dark);">Лучшие спортсмены</h2>
+                <div class="section-line"></div>
             </div>
-            <a asp-controller="Athlete" class="btn btn-outline-primary px-4">
-                Все спортсмены <i class="bi bi-arrow-right ms-1"></i>
+            <a asp-controller="Athlete" class="btn btn-outline-primary px-4 d-flex align-items-center gap-2">
+                Все <i class="bi bi-arrow-right"></i>
             </a>
         </div>
-        <div class="row">
-            @foreach (var athlete in topAthletes)
-            {
-                <div class="col-md-4 col-xl-3 mb-4">
-                    <div class="card h-100">
-                        @if (!string.IsNullOrEmpty(athlete.PhotoUrl))
-                        {
-                            <img src="@athlete.PhotoUrl" class="card-img-top" alt="@athlete.FirstName @athlete.LastName" style="height: 220px; object-fit: cover;">
-                        }
-                        else
-                        {
-                            <div class="bg-dark d-flex align-items-center justify-content-center" style="height: 220px;">
-                                <span class="text-white display-4 fw-bold">@(athlete.FirstName[0])@(athlete.LastName[0])</span>
+        @if (topAthletes.Any())
+        {
+            <div class="row">
+                @foreach (var athlete in topAthletes.Take(4))
+                {
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card h-100 text-center">
+                            @if (!string.IsNullOrEmpty(athlete.PhotoUrl))
+                            {
+                                <img src="@athlete.PhotoUrl" class="card-img-top" alt="@athlete.FirstName @athlete.LastName" style="height: 220px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div style="height: 220px; background: linear-gradient(135deg, var(--dark), #1e293b); display: flex; align-items: center; justify-content: center;">
+                                    <span class="text-white display-4 fw-bold">@(athlete.FirstName[0])@(athlete.LastName[0])</span>
+                                </div>
+                            }
+                            <div class="card-body">
+                                <h5 class="fw-bold mb-1">@athlete.FirstName @athlete.LastName</h5>
+                                <div class="d-flex justify-content-center gap-2 text-muted small mb-2">
+                                    <span><i class="bi bi-sport me-1"></i>@athlete.Team?.SportType</span>
+                                    <span>|</span>
+                                    <span><i class="bi bi-people me-1"></i>@athlete.Group</span>
+                                </div>
+                                @if (athlete.Achievements.Any())
+                                {
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-trophy-fill me-1"></i>@athlete.Achievements.Count достижений</span>
+                                }
                             </div>
-                        }
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold mb-1">@athlete.FirstName @athlete.LastName</h5>
-                            <p class="text-muted small mb-0">
-                                <i class="bi bi-sport me-1"></i>@athlete.Team?.SportType<br class="d-md-none">
-                                <span class="d-none d-md-inline">| </span>
-                                <i class="bi bi-people me-1"></i>@athlete.Group
-                            </p>
-                        </div>
-                        <div class="card-footer bg-white border-top-0 text-center pb-3 pt-0">
-                            <a asp-controller="Athlete" asp-action="Details" asp-route-id="@athlete.Id" class="btn btn-primary px-4">
-                                Подробнее <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
+                            <div class="card-footer bg-white border-top-0 pt-0 pb-3">
+                                <a asp-controller="Athlete" asp-action="Details" asp-route-id="@athlete.Id" class="btn btn-primary w-100">
+                                    Профиль <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        }
     </section>
 
     <!-- Latest News -->
-    <section class="mb-5">
+    <section class="mb-5" data-aos="fade-up">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-newspaper text-info fs-3"></i>
-                <h2 class="fw-bold mb-0">Последние новости</h2>
-                <div style="width: 40px; height: 1px; background: linear-gradient(90deg, #e9ecef, transparent);"></div>
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-newspaper text-info fs-4"></i>
+                <h2 class="fw-bold mb-0" style="color: var(--dark);">Последние новости</h2>
+                <div class="section-line"></div>
             </div>
-            <a asp-controller="News" class="btn btn-outline-info px-4">
-                Все новости <i class="bi bi-arrow-right ms-1"></i>
+            <a asp-controller="News" class="btn btn-outline-info px-4 d-flex align-items-center gap-2">
+                Все <i class="bi bi-arrow-right"></i>
             </a>
         </div>
         <div class="row">
-            @foreach (var news in latestNews)
+            @foreach (var news in latestNews.Take(3))
             {
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100">
@@ -178,21 +196,19 @@
                         }
                         else
                         {
-                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                            <div style="height: 180px; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); display: flex; align-items: center; justify-content: center;">
                                 <i class="bi bi-newspaper display-3 text-muted"></i>
                             </div>
                         }
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-primary">@news.Category</span>
-                                <small class="text-muted">
-                                    <i class="bi bi-calendar3 me-1"></i>@news.Date.ToString("dd.MM")
-                                </small>
+                                <span class="badge" style="background: rgba(15,23,42,0.08); color: var(--dark);">@news.Category</span>
+                                <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>@news.Date.ToString("dd.MM")</small>
                             </div>
-                            <h5 class="card-title fw-bold" style="font-size: 1rem;">@news.Title</h5>
+                            <h5 class="fw-bold" style="font-size: 1rem;">@news.Title</h5>
                             <p class="card-text text-muted small flex-grow-1">@(news.Content.Length > 80 ? news.Content.Substring(0, 80) + "..." : news.Content)</p>
-                            <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-outline-primary btn-sm w-100 mt-2">
-                                <i class="bi bi-book me-1"></i>Читать далее
+                            <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-outline-primary btn-sm w-100 mt-2 d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-book"></i> Читать
                             </a>
                         </div>
                     </div>
@@ -202,11 +218,11 @@
     </section>
 
     <!-- Sport Types -->
-    <section>
-        <div class="d-flex align-items-center gap-2 mb-4">
-            <i class="bi bi-grid text-warning fs-3"></i>
-            <h2 class="fw-bold mb-0">Виды спорта</h2>
-            <div class="flex-grow-1" style="height: 1px; background: linear-gradient(90deg, #e9ecef, transparent);"></div>
+    <section data-aos="fade-up">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <i class="bi bi-grid-3x3-gap-fill text-warning fs-4"></i>
+            <h2 class="fw-bold mb-0" style="color: var(--dark);">Виды спорта</h2>
+            <div class="section-line"></div>
         </div>
         <div class="row g-3">
             @{
@@ -219,8 +235,8 @@
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
                     <a asp-controller="Athlete" asp-action="Index" asp-route-sportType="@sportTypesList[i].Value" class="text-decoration-none">
                         <div class="card h-100 text-center p-3">
-                            <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background: @(colors[i % colors.Length])15;">
-                                <i class="bi @icons[i] fs-2" style="color: @(colors[i % colors.Length]);"></i>
+                            <div class="rounded-3 mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; background: @(colors[i % colors.Length])12;">
+                                <i class="bi @icons[i] fs-3" style="color: @(colors[i % colors.Length]);"></i>
                             </div>
                             <p class="mb-0 fw-bold text-dark small">@sportTypesList[i].Text</p>
                         </div>
