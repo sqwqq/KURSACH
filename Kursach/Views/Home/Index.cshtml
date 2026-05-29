@@ -9,10 +9,18 @@
 }
 
 <!-- Hero -->
-<div class="bg-dark text-white py-5">
-    <div class="container">
+<div class="bg-dark text-white py-5 position-relative" style="background: #1a2a5e !important;">
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: 
+        linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px),
+        linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px);
+        background-size: 30px 30px; pointer-events: none;"></div>
+    <div class="container position-relative">
         <div class="row align-items-center">
             <div class="col-lg-8">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span style="width: 4px; height: 24px; background: #f59e0b; display: inline-block;"></span>
+                    <span class="text-uppercase small fw-bold text-white-50 letter-spacing-2">PGEC Sports</span>
+                </div>
                 <h1 class="display-4 fw-bold mb-3">Спортивные достижения колледжа</h1>
                 <p class="lead mb-4 text-white-50">Мы гордимся нашими спортсменами, которые достигают вершин мастерства в различных видах спорта</p>
                 <div class="d-flex flex-wrap gap-3">
@@ -26,28 +34,32 @@
             </div>
         </div>
     </div>
+    <div style="height: 4px; background: linear-gradient(90deg, #f59e0b 0%, transparent 100%);"></div>
 </div>
 
 <!-- Stats -->
-<div class="bg-white border-bottom py-4">
+<div class="bg-white py-4" style="border-bottom: 1px solid #e9ecef;">
     <div class="container">
         <div class="row text-center g-3">
             <div class="col-4">
-                <div class="py-3">
+                <div class="py-3 position-relative">
+                    <div style="width: 30px; height: 2px; background: #f59e0b; margin: 0 auto 8px;"></div>
                     <i class="bi bi-people-fill display-5 text-primary mb-2 d-block"></i>
                     <h2 class="fw-bold mb-0">@(stats?.TotalAthletes ?? 0)</h2>
                     <small class="text-muted">Спортсменов</small>
                 </div>
             </div>
             <div class="col-4">
-                <div class="py-3">
+                <div class="py-3 position-relative">
+                    <div style="width: 30px; height: 2px; background: #f59e0b; margin: 0 auto 8px;"></div>
                     <i class="bi bi-award-fill display-5 text-warning mb-2 d-block"></i>
                     <h2 class="fw-bold mb-0">@(stats?.TotalAchievements ?? 0)</h2>
                     <small class="text-muted">Достижений</small>
                 </div>
             </div>
             <div class="col-4">
-                <div class="py-3">
+                <div class="py-3 position-relative">
+                    <div style="width: 30px; height: 2px; background: #f59e0b; margin: 0 auto 8px;"></div>
                     <i class="bi bi-flag-fill display-5 text-success mb-2 d-block"></i>
                     <h2 class="fw-bold mb-0">@(stats?.TotalTeams ?? 0)</h2>
                     <small class="text-muted">Команд</small>
@@ -63,9 +75,12 @@
     @if (featuredNews.Any())
     {
         <section class="mb-5">
-            <h2 class="fw-bold mb-4">
-                <i class="bi bi-star-fill text-warning me-2"></i>Избранные новости
-            </h2>
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div style="width: 4px; height: 28px; background: #f59e0b;"></div>
+                <h2 class="fw-bold mb-0">
+                    <i class="bi bi-star-fill text-warning me-2"></i>Избранные новости
+                </h2>
+            </div>
             <div class="row">
                 @foreach (var featured in featuredNews)
                 {
@@ -95,9 +110,12 @@
     <!-- Top Athletes -->
     <section class="mb-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold mb-0">
-                <i class="bi bi-person-badge text-primary me-2"></i>Лучшие спортсмены
-            </h2>
+            <div class="d-flex align-items-center gap-3">
+                <div style="width: 4px; height: 28px; background: #f59e0b;"></div>
+                <h2 class="fw-bold mb-0">
+                    <i class="bi bi-person-badge text-primary me-2"></i>Лучшие спортсмены
+                </h2>
+            </div>
             <a asp-controller="Athlete" class="btn btn-outline-primary px-4">
                 Все спортсмены <i class="bi bi-arrow-right ms-1"></i>
             </a>
@@ -139,9 +157,12 @@
     <!-- Latest News -->
     <section class="mb-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold mb-0">
-                <i class="bi bi-newspaper text-info me-2"></i>Последние новости
-            </h2>
+            <div class="d-flex align-items-center gap-3">
+                <div style="width: 4px; height: 28px; background: #f59e0b;"></div>
+                <h2 class="fw-bold mb-0">
+                    <i class="bi bi-newspaper text-info me-2"></i>Последние новости
+                </h2>
+            </div>
             <a asp-controller="News" class="btn btn-outline-info px-4">
                 Все новости <i class="bi bi-arrow-right ms-1"></i>
             </a>
@@ -182,9 +203,12 @@
 
     <!-- Sport Types -->
     <section>
-        <h2 class="fw-bold mb-4">
-            <i class="bi bi-lightning text-warning me-2"></i>Виды спорта
-        </h2>
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <div style="width: 4px; height: 28px; background: #f59e0b;"></div>
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-lightning text-warning me-2"></i>Виды спорта
+            </h2>
+        </div>
         <div class="row g-3">
             @{
                 var icons = new[] { "bi-basketball", "bi-volleyball", "bi-dribbble", "bi-water", "bi-person-running", "bi-bicycle" };
