@@ -484,4 +484,4 @@ $RECYCLE.BIN/
 *.swp
 
 # Local lib files (using CDN)
-wwwroot/lib/
+Kursach/wwwroot/lib/
