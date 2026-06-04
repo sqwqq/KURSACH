@@ -21,7 +21,7 @@
                         <input type="text" name="searchString" class="form-control" placeholder="Поиск по имени..." value="@ViewBag.CurrentFilter">
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-sport me-1"></i>Вид спорта</label>
+                        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-activity me-1"></i>Вид спорта</label>
                         <select name="sportType" class="form-select" asp-items="ViewBag.SportTypes">
                             <option value="">Все виды спорта</option>
                         </select>
@@ -87,7 +87,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title fw-bold mb-1">@athlete.FirstName @athlete.LastName</h5>
                         <p class="card-text text-muted small mb-0">
-                            <i class="bi bi-sport me-1"></i>@athlete.Team?.SportType<br class="d-md-none">
+                            <i class="bi bi-activity me-1"></i>@athlete.Team?.SportType<br class="d-md-none">
                             <span class="d-none d-md-inline">| </span>
                             <i class="bi bi-people me-1"></i>@athlete.Group
                         </p>
@@ -99,4 +99,28 @@
             </div>
         }
     </div>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(ViewBag.Page <= 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.Page - 1)" asp-route-searchString="@ViewBag.CurrentFilter" asp-route-sportType="@ViewBag.CurrentSportType" asp-route-sortOrder="@ViewBag.CurrentSort">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-searchString="@ViewBag.CurrentFilter" asp-route-sportType="@ViewBag.CurrentSportType" asp-route-sortOrder="@ViewBag.CurrentSort">@i</a>
+                    </li>
+                }
+                <li class="page-item @(ViewBag.Page >= ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.Page + 1)" asp-route-searchString="@ViewBag.CurrentFilter" asp-route-sportType="@ViewBag.CurrentSportType" asp-route-sortOrder="@ViewBag.CurrentSort">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
 </div>

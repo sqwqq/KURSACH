@@ -1,0 +1,96 @@
+@{
+    ViewData["Title"] = "Контакты";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1 class="mb-0"><i class="bi bi-envelope me-2"></i>Контакты</h1>
+    </div>
+</div>
+
+<div class="container">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4"><i class="bi bi-geo-alt text-warning me-2"></i>Наши контакты</h4>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 me-3" style="width: 45px; height: 45px;">
+                            <i class="bi bi-geo-alt text-primary"></i>
+                        </div>
+                        <div>
+                            <strong>Адрес</strong><br>
+                            <small class="text-muted">г. Полоцк, ул. Строителей, 15</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-warning bg-opacity-10 me-3" style="width: 45px; height: 45px;">
+                            <i class="bi bi-envelope text-warning"></i>
+                        </div>
+                        <div>
+                            <strong>Email</strong><br>
+                            <small class="text-muted">sports@pgec.edu</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10 me-3" style="width: 45px; height: 45px;">
+                            <i class="bi bi-telephone text-success"></i>
+                        </div>
+                        <div>
+                            <strong>Телефон</strong><br>
+                            <small class="text-muted">+7 (495) 123-45-67</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-info bg-opacity-10 me-3" style="width: 45px; height: 45px;">
+                            <i class="bi bi-clock text-info"></i>
+                        </div>
+                        <div>
+                            <strong>Часы работы</strong><br>
+                            <small class="text-muted">Пн-Пт: 9:00 - 18:00</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4"><i class="bi bi-chat-dots text-primary me-2"></i>Напишите нам</h4>
+                    <form method="post" asp-controller="Home" asp-action="SendContact">
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Ваше имя</label>
+                                <input type="text" name="name" class="form-control" placeholder="Иван Иванов" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" placeholder="ivanov@example.com" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Тема</label>
+                            <input type="text" name="subject" class="form-control" placeholder="Тема сообщения" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Сообщение</label>
+                            <textarea name="message" class="form-control" rows="5" placeholder="Ваше сообщение..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary px-5">
+                            <i class="bi bi-send me-2"></i>Отправить
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

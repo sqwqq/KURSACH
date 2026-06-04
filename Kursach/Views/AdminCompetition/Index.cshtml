@@ -1,0 +1,83 @@
+@model IEnumerable<Kursach.Models.Competition>
+
+@{
+    ViewData["Title"] = "Управление соревнованиями";
+}
+
+<div class="page-header">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Соревнования</h1>
+            </div>
+            <a asp-action="Create" class="btn btn-light px-4">
+                <i class="bi bi-plus-lg me-1"></i>Добавить
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">@TempData["Success"]</div>
+    }
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4">Название</th>
+                            <th>Дата</th>
+                            <th>Вид спорта</th>
+                            <th>Место</th>
+                            <th>Команда</th>
+                            <th style="width: 60px;">Статус</th>
+                            <th class="text-end pe-4" style="width: 120px;">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var comp in Model)
+                        {
+                            <tr class="@(comp.IsCompleted || comp.Date < DateTime.Today ? "text-muted" : "")">
+                                <td class="ps-4 fw-bold">@comp.Title</td>
+                                <td><small>@comp.Date.ToString("dd.MM.yyyy")</small></td>
+                                <td><span class="badge bg-primary">@comp.SportType</span></td>
+                                <td><small>@comp.Location</small></td>
+                                <td><small>@comp.Team?.Name</small></td>
+                                <td>
+                                    @if (comp.IsCompleted)
+                                    {
+                                        <span class="badge bg-success" title="Завершено">✓</span>
+                                    }
+                                    else if (comp.Date < DateTime.Today)
+                                    {
+                                        <span class="badge bg-secondary" title="Просрочено">!</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark" title="Предстоит">⌛</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex gap-1 justify-content-end">
+                                        <a asp-action="Edit" asp-route-id="@comp.Id" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@comp.Id" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Назад в админ-панель
+        </a>
+    </div>
+</div>

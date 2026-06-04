@@ -1,9 +1,9 @@
 @model Kursach.Models.Athlete
 @{
     var totalAchievements = Model.Achievements?.Count() ?? 0;
-    var firstPlaces = Model.Achievements?.Count(a => a.Place.Contains("1")) ?? 0;
-    var secondPlaces = Model.Achievements?.Count(a => a.Place.Contains("2")) ?? 0;
-    var thirdPlaces = Model.Achievements?.Count(a => a.Place.Contains("3")) ?? 0;
+    var firstPlaces = Model.Achievements?.Count(a => a.Place != null && int.TryParse(a.Place.Split(' ')[0], out var n) && n == 1) ?? 0;
+    var secondPlaces = Model.Achievements?.Count(a => a.Place != null && int.TryParse(a.Place.Split(' ')[0], out var n) && n == 2) ?? 0;
+    var thirdPlaces = Model.Achievements?.Count(a => a.Place != null && int.TryParse(a.Place.Split(' ')[0], out var n) && n == 3) ?? 0;
 }
 
 <div class="page-header">
@@ -106,71 +106,62 @@
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header bg-white py-3">
-                    <h4 class="mb-0 fw-bold">
-                        <i class="bi bi-trophy text-warning me-2"></i>Достижения спортсмена
-                    </h4>
-                </div>
-                <div class="card-body p-0">
-                    @if (Model.Achievements != null && Model.Achievements.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0 align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="ps-4">Название</th>
-                                        <th>Вид спорта</th>
-                                        <th>Место</th>
-                                        <th>Дата</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var achievement in Model.Achievements.OrderByDescending(a => a.Date))
-                                    {
-                                        <tr>
-                                            <td class="ps-4 fw-bold">@achievement.Title</td>
-                                            <td><span class="badge bg-light text-dark border">@achievement.SportType</span></td>
-                                            <td>
-                                                @if (achievement.Place.Contains("1"))
-                                                {
-                                                    <span class="badge bg-warning text-dark px-3 py-2">
-                                                        <i class="bi bi-trophy-fill me-1"></i>@achievement.Place
-                                                    </span>
-                                                }
-                                                else if (achievement.Place.Contains("2"))
-                                                {
-                                                    <span class="badge bg-secondary text-white px-3 py-2">
-                                                        <i class="bi bi-star-fill me-1"></i>@achievement.Place
-                                                    </span>
-                                                }
-                                                else if (achievement.Place.Contains("3"))
-                                                {
-                                                    <span class="badge bg-danger text-white px-3 py-2">
-                                                        <i class="bi bi-award-fill me-1"></i>@achievement.Place
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-info px-3 py-2">@achievement.Place</span>
-                                                }
-                                            </td>
-                                            <td><small class="text-muted"><i class="bi bi-calendar me-1"></i>@achievement.Date.ToString("dd.MM.yyyy")</small></td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+            @if (Model.Achievements != null && Model.Achievements.Any())
+            {
+                <div class="card mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h4 class="mb-0 fw-bold">
+                            <i class="bi bi-clock-history text-primary me-2"></i>Таймлайн достижений
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="position-relative" style="padding-left: 30px;">
+                            <div style="position:absolute;left:10px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#f59e0b,#3b82f6);"></div>
+                            @foreach (var ach in Model.Achievements.OrderByDescending(a => a.Date))
+                            {
+                                var pn = 0; var ps = ach.Place ?? "";
+                                if (!string.IsNullOrEmpty(ps)) int.TryParse(ps.Split(' ')[0], out pn);
+                                <div class="mb-3 position-relative" style="animation:fadeIn 0.4s ease">
+                                    <div style="position:absolute;left:-24px;top:4px;width:16px;height:16px;border-radius:50%;border:3px solid @(pn==1?"#f59e0b":pn==2?"#94a3b8":pn==3?"#ef4444":"#3b82f6");background:var(--card-bg);"></div>
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong>@ach.Title</strong>
+                                            <div><span class="badge bg-light text-dark border me-2">@ach.SportType</span>
+                                            @if (pn == 1)
+                                            {
+                                                <span class="badge bg-warning text-dark"><i class="bi bi-trophy-fill me-1"></i>@ach.Place</span>
+                                            }
+                                            else if (pn == 2)
+                                            {
+                                                <span class="badge bg-secondary text-white"><i class="bi bi-star-fill me-1"></i>@ach.Place</span>
+                                            }
+                                            else if (pn == 3)
+                                            {
+                                                <span class="badge bg-danger text-white"><i class="bi bi-award-fill me-1"></i>@ach.Place</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info">@ach.Place</span>
+                                            }
+                                            </div>
+                                        </div>
+                                        <small class="text-muted"><i class="bi bi-calendar me-1"></i>@ach.Date.ToString("dd.MM.yyyy")</small>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-5">
-                            <i class="bi bi-trophy display-1 text-muted"></i>
-                            <p class="text-muted mt-3">Нет достижений</p>
-                        </div>
-                    }
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="card mb-4">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-trophy display-1 text-muted"></i>
+                        <p class="text-muted mt-3">Нет достижений</p>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

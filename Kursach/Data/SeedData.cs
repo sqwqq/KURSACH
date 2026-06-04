@@ -35,18 +35,18 @@ public static class SeedData
         // Athletes (12+)
         var athletes = new List<Athlete>
         {
-            new Athlete { FirstName = "Александр", LastName = "Козлов", Group = "ИС-21", PhotoUrl = "https://placehold.co/400x500/1e3c72/white?text=AK", Bio = "Капитан баскетбольной команды. Играет на позиции разыгрывающего защитника.", Height = 185, Weight = 78, TeamId = teams[0].Id },
-            new Athlete { FirstName = "Мария", LastName = "Смирнова", Group = "П-22", PhotoUrl = "https://placehold.co/400x500/e74c3c/white?text=MS", Bio = "Центральная нападающая. Чемпионка города по баскетболу.", Height = 175, Weight = 65, TeamId = teams[0].Id },
-            new Athlete { FirstName = "Дмитрий", LastName = "Волков", Group = "ТМ-21", PhotoUrl = "https://placehold.co/400x500/3498db/white?text=DV", Bio = "Связующий игрок. Опыт игры 5 лет.", Height = 190, Weight = 82, TeamId = teams[1].Id },
-            new Athlete { FirstName = "Екатерина", LastName = "Новикова", Group = "Э-23", PhotoUrl = "https://placehold.co/400x500/9b59b6/white?text=EN", Bio = "Либеро. Одна из лучших защитниц в регионе.", Height = 168, Weight = 58, TeamId = teams[1].Id },
-            new Athlete { FirstName = "Игорь", LastName = "Морозов", Group = "МЧ-20", PhotoUrl = "https://placehold.co/400x500/27ae60/white?text=IM", Bio = "Нападающий. Бомбардир команды.", Height = 182, Weight = 75, TeamId = teams[2].Id },
-            new Athlete { FirstName = "Анна", LastName = "Петрова", Group = "П-22", PhotoUrl = "https://placehold.co/400x500/f39c12/white?text=AP", Bio = "Пловец. Призер всероссийских соревнований.", Height = 170, Weight = 62, TeamId = teams[3].Id },
-            new Athlete { FirstName = "Сергей", LastName = "Кузнецов", Group = "ИС-21", PhotoUrl = "https://placehold.co/400x500/1abc9c/white?text=SK", Bio = "Бегун на короткие дистанции. Рекордсмен ПГЭК.", Height = 178, Weight = 72, TeamId = teams[4].Id },
-            new Athlete { FirstName = "Ольга", LastName = "Васильева", Group = "ТМ-23", PhotoUrl = "https://placehold.co/400x500/e67e22/white?text=OV", Bio = "Метатель копья. Чемпионка области.", Height = 172, Weight = 66, TeamId = teams[4].Id },
-            new Athlete { FirstName = "Никита", LastName = "Степанов", Group = "МЧ-22", PhotoUrl = "https://placehold.co/400x500/34495e/white?text=NS", Bio = "Теннисист. Призер региональных турниров.", Height = 175, Weight = 70, TeamId = teams[5].Id },
-            new Athlete { FirstName = "Алиса", LastName = "Дмитриева", Group = "Э-21", PhotoUrl = "https://placehold.co/400x500/8e44ad/white?text=AD", Bio = "Волейболистка. Игрок основного состава.", Height = 172, Weight = 64, TeamId = teams[1].Id },
-            new Athlete { FirstName = "Владимир", LastName = "Егоров", Group = "П-21", PhotoUrl = "https://placehold.co/400x500/16a085/white?text=VE", Bio = "Пловец. Специалист на дистанции 100м вольным стилем.", Height = 180, Weight = 75, TeamId = teams[3].Id },
-            new Athlete { FirstName = "Полина", LastName = "Зайцева", Group = "ИС-22", PhotoUrl = "https://placehold.co/400x500/d35400/white?text=PZ", Bio = "Баскетболистка. Снайпер команды.", Height = 170, Weight = 60, TeamId = teams[0].Id }
+            new Athlete { FirstName = "Александр", LastName = "Козлов", Group = "ИС-21", PhotoUrl = "/images/athletes/Aleksandr_Kozlov.jpg", Bio = "Капитан баскетбольной команды. Играет на позиции разыгрывающего защитника.", Height = 185, Weight = 78, TeamId = teams[0].Id },
+            new Athlete { FirstName = "Мария", LastName = "Смирнова", Group = "П-22", PhotoUrl = "/images/athletes/Mariya_Smirnova.jpg", Bio = "Центральная нападающая. Чемпионка города по баскетболу.", Height = 175, Weight = 65, TeamId = teams[0].Id },
+            new Athlete { FirstName = "Дмитрий", LastName = "Волков", Group = "ТМ-21", PhotoUrl = "/images/athletes/Dmitriy_Volkov.jpg", Bio = "Связующий игрок. Опыт игры 5 лет.", Height = 190, Weight = 82, TeamId = teams[1].Id },
+            new Athlete { FirstName = "Екатерина", LastName = "Новикова", Group = "Э-23", PhotoUrl = "/images/athletes/Ekaterina_Novikova.jpg", Bio = "Либеро. Одна из лучших защитниц в регионе.", Height = 168, Weight = 58, TeamId = teams[1].Id },
+            new Athlete { FirstName = "Игорь", LastName = "Морозов", Group = "МЧ-20", PhotoUrl = "/images/athletes/Igor_Morozov.jpg", Bio = "Нападающий. Бомбардир команды.", Height = 182, Weight = 75, TeamId = teams[2].Id },
+            new Athlete { FirstName = "Анна", LastName = "Петрова", Group = "П-22", PhotoUrl = "/images/athletes/Anna_Petrova.jpg", Bio = "Пловец. Призер всероссийских соревнований.", Height = 170, Weight = 62, TeamId = teams[3].Id },
+            new Athlete { FirstName = "Сергей", LastName = "Кузнецов", Group = "ИС-21", PhotoUrl = "/images/athletes/Sergey_Kuznetsov.jpg", Bio = "Бегун на короткие дистанции. Рекордсмен ПГЭК.", Height = 178, Weight = 72, TeamId = teams[4].Id },
+            new Athlete { FirstName = "Ольга", LastName = "Васильева", Group = "ТМ-23", PhotoUrl = "/images/athletes/Olga_Vasileva.jpg", Bio = "Метатель копья. Чемпионка области.", Height = 172, Weight = 66, TeamId = teams[4].Id },
+            new Athlete { FirstName = "Никита", LastName = "Степанов", Group = "МЧ-22", PhotoUrl = "/images/athletes/Nikita_Stepanov.jpg", Bio = "Теннисист. Призер региональных турниров.", Height = 175, Weight = 70, TeamId = teams[5].Id },
+            new Athlete { FirstName = "Алиса", LastName = "Дмитриева", Group = "Э-21", PhotoUrl = "/images/athletes/Alisa_Dmitrieva.jpg", Bio = "Волейболистка. Игрок основного состава.", Height = 172, Weight = 64, TeamId = teams[1].Id },
+            new Athlete { FirstName = "Владимир", LastName = "Егоров", Group = "П-21", PhotoUrl = "/images/athletes/Vladimir_Egorov.jpg", Bio = "Пловец. Специалист на дистанции 100м вольным стилем.", Height = 180, Weight = 75, TeamId = teams[3].Id },
+            new Athlete { FirstName = "Полина", LastName = "Зайцева", Group = "ИС-22", PhotoUrl = "/images/athletes/Polina_Zaytseva.jpg", Bio = "Баскетболистка. Снайпер команды.", Height = 170, Weight = 60, TeamId = teams[0].Id }
         };
         context.Athletes.AddRange(athletes);
         context.SaveChanges();
@@ -94,5 +94,20 @@ public static class SeedData
         };
         context.News.AddRange(news);
         context.SaveChanges();
+
+        // Competitions (seed only if empty)
+        if (!context.Competitions.Any())
+        {
+            var competitions = new List<Competition>
+            {
+                new Competition { Title = "Чемпионат города по баскетболу", Date = new DateTime(2026, 6, 15), Location = "Спорткомплекс ГЦОР", SportType = "Баскетбол", Description = "Финал чемпионата города среди колледжей", IsCompleted = false, TeamId = teams[0].Id },
+                new Competition { Title = "Кубок области по волейболу", Date = new DateTime(2026, 7, 1), Location = "Витебск, СК Витебск", SportType = "Волейбол", Description = "Областной кубок по волейболу среди студентов", IsCompleted = false, TeamId = teams[1].Id },
+                new Competition { Title = "Турнир по футболу", Date = new DateTime(2026, 5, 30), Location = "Стадион ПГЭК", SportType = "Футбол", Description = "Товарищеский матч между колледжами", IsCompleted = false, TeamId = teams[2].Id },
+                new Competition { Title = "Спартакиада ПГЭК", Date = new DateTime(2026, 9, 10), Location = "Спортзал ПГЭК", SportType = "Плавание", Description = "Ежегодная спартакиада колледжа", IsCompleted = false, TeamId = teams[3].Id },
+                new Competition { Title = "Легкоатлетический кросс", Date = new DateTime(2026, 4, 20), Location = "Городской парк", SportType = "Легкая атлетика", Description = "Осенний легкоатлетический кросс среди студентов", IsCompleted = true, TeamId = teams[4].Id }
+            };
+            context.Competitions.AddRange(competitions);
+            context.SaveChanges();
+        }
     }
 }

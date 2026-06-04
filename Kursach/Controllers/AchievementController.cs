@@ -36,6 +36,7 @@ public class AchievementController : Controller
             .Include(a => a.Athlete)
             .ThenInclude(at => at!.Team)
             .ThenInclude(t => t!.College)
+            .AsNoTracking()
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(sportType))

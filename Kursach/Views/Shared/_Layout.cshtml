@@ -14,6 +14,11 @@
             --accent: #f59e0b;
             --accent-glow: rgba(245, 158, 11, 0.15);
             --surface: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #6c757d;
+            --border-color: rgba(0,0,0,0.04);
+            --header-bg: #ffffff;
         }
         * { scroll-behavior: smooth; }
         body {
@@ -22,7 +27,7 @@
             flex-direction: column;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--surface);
-            color: #1e293b;
+            color: var(--text-color);
             overflow-x: hidden;
         }
         main { flex: 1; }
@@ -95,9 +100,28 @@
         footer a { transition: color 0.2s; }
         footer a:hover { color: var(--accent) !important; }
 
+        /* Smooth page transitions */
+        main { animation: fadeIn 0.3s ease; }
+        @@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Pulse accent glow */
+        @@keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+            50% { box-shadow: 0 0 40px var(--accent-glow); }
+        }
+        .accent-pulse { animation: pulse-glow 3s ease-in-out infinite; }
+
+        /* Stats counter animation */
+        .stat-number { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        /* Glass effect for admin cards */
+        .card.border-0.shadow-sm { transition: all 0.3s ease; }
+        .card.border-0.shadow-sm:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.08) !important; }
+
         /* Modern cards */
         .card {
-            border: 1px solid rgba(0,0,0,0.04);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -108,8 +132,8 @@
         }
         .card .card-img-top { border-radius: 1rem 1rem 0 0; }
         .card-header {
-            background: white;
-            border-bottom: 1px solid rgba(0,0,0,0.04);
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
         }
 
         /* Buttons */
@@ -172,6 +196,13 @@
             .page-header { padding: 2rem 0; }
             .page-header h1 { font-size: 1.6rem; }
         }
+        @@media print {
+            .navbar, footer, #scrollTop, .btn { display: none !important; }
+            .page-header { background: #0b1120 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .card { break-inside: avoid; box-shadow: none !important; border: 1px solid #ddd !important; }
+            body { font-size: 11pt; }
+            main { animation: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -187,28 +218,49 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto align-items-lg-center">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
                                 <i class="bi bi-house-door me-1"></i>Главная
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Athlete" asp-action="Index">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Athlete" ? "active" : "")" asp-controller="Athlete" asp-action="Index">
                                 <i class="bi bi-people me-1"></i>Спортсмены
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Team" asp-action="Index">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Team" ? "active" : "")" asp-controller="Team" asp-action="Index">
                                 <i class="bi bi-flag me-1"></i>Команды
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Achievement" asp-action="Index">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Leaderboard" ? "active" : "")" asp-controller="Home" asp-action="Leaderboard">
+                                <i class="bi bi-bar-chart me-1"></i>Рейтинг
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Competition" ? "active" : "")" asp-controller="Competition" asp-action="Index">
+                                <i class="bi bi-calendar-event me-1"></i>Соревнования
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Achievement" ? "active" : "")" asp-controller="Achievement" asp-action="Index">
                                 <i class="bi bi-award me-1"></i>Достижения
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="News" asp-action="Index">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "News" ? "active" : "")" asp-controller="News" asp-action="Index">
                                 <i class="bi bi-newspaper me-1"></i>Новости
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "About" ? "active" : "")" asp-controller="Home" asp-action="About">
+                                <i class="bi bi-info-circle me-1"></i>О нас
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Search" title="Поиск">
+                                <i class="bi bi-search"></i>
                             </a>
                         </li>
                         @{
@@ -224,6 +276,9 @@
                                     <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index"><i class="bi bi-speedometer2 me-2"></i>Панель</a></li>
                                     <li><a class="dropdown-item" asp-controller="AdminAthlete" asp-action="Index"><i class="bi bi-people me-2"></i>Спортсмены</a></li>
                                     <li><a class="dropdown-item" asp-controller="AdminAchievement" asp-action="Index"><i class="bi bi-trophy me-2"></i>Достижения</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminTeam" asp-action="Index"><i class="bi bi-flag me-2"></i>Команды</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminCollege" asp-action="Index"><i class="bi bi-building me-2"></i>Колледжи</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminCompetition" asp-action="Index"><i class="bi bi-calendar-event me-2"></i>Соревнования</a></li>
                                     <li><a class="dropdown-item" asp-controller="AdminNews" asp-action="Index"><i class="bi bi-newspaper me-2"></i>Новости</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item text-danger" asp-controller="Admin" asp-action="Logout"><i class="bi bi-box-arrow-right me-2"></i>Выход</a></li>
@@ -248,6 +303,13 @@
         @RenderBody()
     </main>
 
+    <!-- Scroll to top -->
+    <button id="scrollTop" class="btn btn-warning rounded-circle position-fixed" 
+            style="bottom: 30px; right: 30px; width: 50px; height: 50px; display: none; z-index: 9999; padding: 0;"
+            onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
     <footer class="text-white pt-5 pb-4">
         <div class="container">
             <div class="row g-4">
@@ -268,7 +330,11 @@
                         <a asp-controller="Athlete" asp-action="Index" class="text-white-50 text-decoration-none small">→ Спортсмены</a>
                         <a asp-controller="Team" asp-action="Index" class="text-white-50 text-decoration-none small">→ Команды</a>
                         <a asp-controller="Achievement" asp-action="Index" class="text-white-50 text-decoration-none small">→ Достижения</a>
+                        <a asp-controller="Competition" asp-action="Index" class="text-white-50 text-decoration-none small">→ Соревнования</a>
                         <a asp-controller="News" asp-action="Index" class="text-white-50 text-decoration-none small">→ Новости</a>
+                        <a asp-controller="Home" asp-action="Leaderboard" class="text-white-50 text-decoration-none small">→ Рейтинг</a>
+                        <a asp-controller="Home" asp-action="About" class="text-white-50 text-decoration-none small">→ О нас</a>
+                        <a asp-controller="Home" asp-action="Contact" class="text-white-50 text-decoration-none small">→ Контакты</a>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -291,6 +357,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init({ duration: 800, once: true, offset: 100 });</script>
+    <script>
+        // Scroll to top button
+        window.addEventListener('scroll', function() {
+            document.getElementById('scrollTop').style.display = window.scrollY > 400 ? 'block' : 'none';
+        });
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.1.0/jquery.validate.unobtrusive.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

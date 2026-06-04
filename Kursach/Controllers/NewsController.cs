@@ -28,6 +28,7 @@ public class NewsController : Controller
 
         var news = _context.News
             .Include(n => n.Athlete)
+            .AsNoTracking()
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(category))

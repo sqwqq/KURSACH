@@ -39,6 +39,7 @@
                             <th>Заголовок</th>
                             <th>Категория</th>
                             <th>Дата</th>
+                            <th style="width: 80px;">Важная</th>
                             <th class="text-end pe-4" style="width: 150px;">Действия</th>
                         </tr>
                     </thead>
@@ -69,6 +70,15 @@
                                     <span class="badge bg-primary">@news.Category</span>
                                 </td>
                                 <td><small class="text-muted"><i class="bi bi-calendar me-1"></i>@news.Date.ToString("dd.MM.yyyy")</small></td>
+                                <td class="text-center">
+                                    <form asp-action="ToggleFeatured" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@news.Id" />
+                                        <button type="submit" class="btn btn-sm @(news.IsFeatured ? "btn-warning" : "btn-outline-secondary")" title="@(news.IsFeatured ? "Убрать из избранного" : "Сделать важной")">
+                                            <i class="bi @(news.IsFeatured ? "bi-star-fill" : "bi-star")"></i>
+                                        </button>
+                                    </form>
+                                </td>
                                 <td class="text-end pe-4">
                                     <div class="d-flex gap-1 justify-content-end">
                                         <a asp-action="Details" asp-route-id="@news.Id" class="btn btn-sm btn-outline-info" title="Просмотр">

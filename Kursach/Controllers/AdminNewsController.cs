@@ -10,10 +10,24 @@ namespace Kursach.Controllers;
 public class AdminNewsController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly IWebHostEnvironment _env;
 
-    public AdminNewsController(AppDbContext context)
+    public AdminNewsController(AppDbContext context, IWebHostEnvironment env)
     {
         _context = context;
+        _env = env;
+    }
+
+    private async Task<string?> SaveImageAsync(IFormFile? image)
+    {
+        if (image == null || image.Length == 0) return null;
+        var uploadsDir = Path.Combine(_env.WebRootPath, "uploads");
+        Directory.CreateDirectory(uploadsDir);
+        var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+        var filePath = Path.Combine(uploadsDir, fileName);
+        using var stream = new FileStream(filePath, FileMode.Create);
+        await image.CopyToAsync(stream);
+        return "/uploads/" + fileName;
     }
 
     public async Task<IActionResult> Index()
@@ -35,10 +49,12 @@ public class AdminNewsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(News news)
+    public async Task<IActionResult> Create(News news, IFormFile? image)
     {
         if (ModelState.IsValid)
         {
+            var imageUrl = await SaveImageAsync(image);
+            if (imageUrl != null) news.ImageUrl = imageUrl;
             _context.News.Add(news);
             await _context.SaveChangesAsync();
             TempData["Success"] = "Новость успешно добавлена";
@@ -66,7 +82,7 @@ public class AdminNewsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, News news)
+    public async Task<IActionResult> Edit(int id, News news, IFormFile? image)
     {
         if (id != news.Id)
             return NotFound();
@@ -79,12 +95,15 @@ public class AdminNewsController : Controller
                 if (existingNews == null)
                     return NotFound();
 
+                var imageUrl = await SaveImageAsync(image);
+
                 existingNews.Title = news.Title;
                 existingNews.Content = news.Content;
                 existingNews.Date = news.Date;
                 existingNews.Category = news.Category;
                 existingNews.AthleteId = news.AthleteId;
-                existingNews.ImageUrl = news.ImageUrl;
+                if (imageUrl != null) existingNews.ImageUrl = imageUrl;
+                existingNews.IsFeatured = news.IsFeatured;
 
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Новость успешно обновлена";
@@ -143,5 +162,18 @@ public class AdminNewsController : Controller
             return NotFound();
 
         return View(news);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ToggleFeatured(int id)
+    {
+        var newsItem = await _context.News.FindAsync(id);
+        if (newsItem != null)
+        {
+            newsItem.IsFeatured = !newsItem.IsFeatured;
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToAction(nameof(Index));
     }
 }

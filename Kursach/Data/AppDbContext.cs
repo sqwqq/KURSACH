@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<Athlete> Athletes { get; set; }
     public DbSet<Achievement> Achievements { get; set; }
     public DbSet<News> News { get; set; }
+    public DbSet<Competition> Competitions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,13 +24,13 @@ public class AppDbContext : DbContext
             .HasOne(a => a.Team)
             .WithMany(t => t.Athletes)
             .HasForeignKey(a => a.TeamId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Team>()
             .HasOne(t => t.College)
             .WithMany(c => c.Teams)
             .HasForeignKey(t => t.CollegeId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Achievement>()
             .HasOne(a => a.Athlete)
@@ -47,6 +48,12 @@ public class AppDbContext : DbContext
             .HasOne(n => n.Athlete)
             .WithMany(at => at.News)
             .HasForeignKey(n => n.AthleteId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Competition>()
+            .HasOne(c => c.Team)
+            .WithMany(t => t.Competitions)
+            .HasForeignKey(c => c.TeamId)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }

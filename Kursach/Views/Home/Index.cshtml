@@ -11,7 +11,7 @@
 
 <!-- Hero Section -->
 <div class="position-relative text-white" style="background: linear-gradient(135deg, #0b1120 0%, #1a2332 50%, #0b1120 100%); min-height: 70vh; display: flex; align-items: center;">
-    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(245,158,11,0.03)" stroke-width="0.5"/></svg>') repeat; background-size: 60px 60px; opacity: 0.5; pointer-events: none;"></div>
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22rgba(245,158,11,0.03)%22 stroke-width=%220.5%22/%3E%3C/svg%3E') repeat; background-size: 60px 60px; opacity: 0.5; pointer-events: none;"></div>
     <div class="position-absolute" style="top: 10%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%); border-radius: 50%;"></div>
     <div class="container position-relative">
         <div class="row align-items-center g-5">
@@ -108,7 +108,7 @@
                                     <i class="bi bi-star-fill me-1"></i>Важное
                                 </span>
                                 <h4 class="card-title fw-bold">@featured.Title</h4>
-                                <p class="card-text text-muted flex-grow-1">@(featured.Content.Length > 120 ? featured.Content.Substring(0, 120) + "..." : featured.Content)</p>
+                                <p class="card-text text-muted flex-grow-1">@(featured.Content?.Length > 120 ? featured.Content.Substring(0, 120) + "..." : featured.Content)</p>
                                 <a asp-controller="News" asp-action="Details" asp-route-id="@featured.Id" class="btn btn-warning fw-bold align-self-start">
                                     Читать <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
@@ -152,7 +152,7 @@
                             <div class="card-body">
                                 <h5 class="fw-bold mb-1">@athlete.FirstName @athlete.LastName</h5>
                                 <div class="d-flex justify-content-center gap-2 text-muted small mb-2">
-                                    <span><i class="bi bi-sport me-1"></i>@athlete.Team?.SportType</span>
+                                    <span><i class="bi bi-activity me-1"></i>@athlete.Team?.SportType</span>
                                     <span>|</span>
                                     <span><i class="bi bi-people me-1"></i>@athlete.Group</span>
                                 </div>
@@ -206,7 +206,7 @@
                                 <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>@news.Date.ToString("dd.MM")</small>
                             </div>
                             <h5 class="fw-bold" style="font-size: 1rem;">@news.Title</h5>
-                            <p class="card-text text-muted small flex-grow-1">@(news.Content.Length > 80 ? news.Content.Substring(0, 80) + "..." : news.Content)</p>
+                            <p class="card-text text-muted small flex-grow-1">@(news.Content?.Length > 80 ? news.Content.Substring(0, 80) + "..." : news.Content)</p>
                             <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-outline-primary btn-sm w-100 mt-2 d-flex align-items-center justify-content-center gap-2">
                                 <i class="bi bi-book"></i> Читать
                             </a>
@@ -217,6 +217,49 @@
         </div>
     </section>
 
+    <!-- Upcoming Competitions -->
+    @{
+        var upcomingComps = ViewBag.UpcomingCompetitions as IEnumerable<Kursach.Models.Competition> ?? Enumerable.Empty<Kursach.Models.Competition>();
+    }
+    @if (upcomingComps.Any())
+    {
+        <section class="mb-5" data-aos="fade-up">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-calendar-event text-danger fs-4"></i>
+                    <h2 class="fw-bold mb-0" style="color: var(--dark);">Предстоящие соревнования</h2>
+                    <div class="section-line"></div>
+                </div>
+                <a asp-controller="Competition" class="btn btn-outline-danger px-4 d-flex align-items-center gap-2">
+                    Все <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+            <div class="row">
+                @foreach (var comp in upcomingComps)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center p-4" data-aos="fade-up" data-aos-delay="100">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3 mx-auto" style="width: 70px; height: 70px; background: linear-gradient(135deg, #fef2f2, #fee2e2);">
+                                <i class="bi bi-trophy fs-2" style="color: #dc2626;"></i>
+                            </div>
+                            <h5 class="fw-bold mb-1">@comp.Title</h5>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-calendar me-1"></i>@comp.Date.ToString("dd.MM.yyyy")
+                                <span class="mx-1">|</span>
+                                <i class="bi bi-geo-alt me-1"></i>@comp.Location
+                            </p>
+                            <span class="badge bg-primary mx-auto">@comp.SportType</span>
+                            @if (comp.Team != null)
+                            {
+                                <small class="text-muted d-block mt-2"><i class="bi bi-flag me-1"></i>@comp.Team.Name</small>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
     <!-- Sport Types -->
     <section data-aos="fade-up">
         <div class="d-flex align-items-center gap-3 mb-4">
@@ -226,23 +269,73 @@
         </div>
         <div class="row g-3">
             @{
-                var icons = new[] { "bi-basketball", "bi-volleyball", "bi-dribbble", "bi-water", "bi-person-running", "bi-bicycle" };
+                var sportImages = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Баскетбол"] = "~/images/sports/basketball.jpg",
+                    ["Волейбол"] = "~/images/sports/volleyball.jpg",
+                    ["Футбол"] = "~/images/sports/football.jpg",
+                    ["Плавание"] = "~/images/sports/swimming.jpg",
+                    ["Легкая атлетика"] = "~/images/sports/athletics.jpg",
+                    ["Тяжёлая атлетика"] = "~/images/sports/weightlifting.jpg",
+                    ["Бокс"] = "~/images/sports/boxing.jpg",
+                    ["Теннис"] = "~/images/sports/tennis.jpg",
+                    ["Хоккей"] = "~/images/sports/hockey.jpg",
+                    ["Гимнастика"] = "~/images/sports/gymnastics.jpg",
+                    ["Лыжи"] = "~/images/sports/skiing.jpg",
+                    ["Велоспорт"] = "~/images/sports/cycling.jpg",
+                    ["Настольный теннис"] = "~/images/sports/table_tennis.jpg",
+                    ["Шахматы"] = "~/images/sports/chess.jpg"
+                };
                 var colors = new[] { "#3b82f6", "#f59e0b", "#22c55e", "#06b6d4", "#ef4444", "#8b5cf6" };
                 var sportTypesList = (ViewBag.SportTypes as SelectList)?.ToList() ?? new List<SelectListItem>();
             }
             @for (int i = 0; i < sportTypesList.Count && i < 6; i++)
             {
+                var sportName = sportTypesList[i].Text;
+                var imgUrl = sportImages.TryGetValue(sportName ?? "", out var url) ? url : null;
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
                     <a asp-controller="Athlete" asp-action="Index" asp-route-sportType="@sportTypesList[i].Value" class="text-decoration-none">
-                        <div class="card h-100 text-center p-3">
-                            <div class="rounded-3 mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; background: @(colors[i % colors.Length])12;">
-                                <i class="bi @icons[i] fs-3" style="color: @(colors[i % colors.Length]);"></i>
+                        <div class="card h-100 text-center border-0 overflow-hidden" style="border-radius: 1rem;">
+                            <div class="position-relative" style="height: 140px; overflow: hidden;">
+                                @if (imgUrl != null)
+                                {
+                                    <img src="@Url.Content(imgUrl)" alt="@sportName" class="w-100 h-100" style="object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, @(colors[i % colors.Length])22, @(colors[i % colors.Length])44);">
+                                        <i class="bi bi-activity fs-1" style="color: @(colors[i % colors.Length]);"></i>
+                                    </div>
+                                }
+                                <div class="position-absolute bottom-0 start-0 end-0" style="background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 2rem 0.5rem 0.5rem 0.5rem;">
+                                    <p class="mb-0 fw-bold text-white small text-center">@sportName</p>
+                                </div>
                             </div>
-                            <p class="mb-0 fw-bold text-dark small">@sportTypesList[i].Text</p>
                         </div>
                     </a>
                 </div>
             }
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="mt-5" data-aos="fade-up">
+        <div class="card" style="background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 100%); border: none;">
+            <div class="card-body text-center py-5 px-4">
+                <div class="position-relative">
+                    <i class="bi bi-trophy-fill display-1 mb-3 d-block" style="color: var(--accent); opacity: 0.3;"></i>
+                </div>
+                <h3 class="text-white fw-bold mb-2">Стань частью спортивной истории</h3>
+                <p class="text-white-50 mb-4" style="max-width: 500px; margin: 0 auto;">Полоцкий государственный экономический колледж — место, где рождаются чемпионы</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-controller="Athlete" asp-action="Index" class="btn btn-warning fw-bold px-5">
+                        <i class="bi bi-people me-2"></i>Наши спортсмены
+                    </a>
+                    <a asp-controller="Home" asp-action="About" class="btn btn-outline-light px-5">
+                        <i class="bi bi-info-circle me-2"></i>О нас
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 </div>

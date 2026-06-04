@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = "Соревнования";
+    var upcoming = ViewBag.Upcoming as IEnumerable<Kursach.Models.Competition> ?? Enumerable.Empty<Kursach.Models.Competition>();
+    var completed = ViewBag.Completed as IEnumerable<Kursach.Models.Competition> ?? Enumerable.Empty<Kursach.Models.Competition>();
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Соревнования</h1>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Upcoming Competitions -->
+    <section class="mb-5">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <i class="bi bi-clock-history text-success fs-4"></i>
+            <h3 class="fw-bold mb-0">Предстоящие соревнования</h3>
+            <div class="section-line"></div>
+        </div>
+
+        @if (!upcoming.Any())
+        {
+            <div class="alert alert-info text-center py-4">
+                <i class="bi bi-calendar-check display-4 d-block mb-3 text-muted"></i>
+                <h4 class="fw-bold">Нет предстоящих соревнований</h4>
+                <p class="mb-0 text-muted">Следите за обновлениями</p>
+            </div>
+        }
+
+        <div class="row">
+            @foreach (var comp in upcoming)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100" data-aos="fade-up">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="text-center me-3">
+                                    <div class="rounded-3 p-2 px-3" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                                        <div class="text-white small fw-bold">@comp.Date.ToString("MMM", System.Globalization.CultureInfo.GetCultureInfo("ru-RU"))</div>
+                                        <div class="text-white display-6 fw-bold lh-1">@comp.Date.Day</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-1">@comp.Title</h5>
+                                    <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>@comp.Location</small>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 mb-2">
+                                <span class="badge bg-primary">@comp.SportType</span>
+                                @if (comp.Team != null)
+                                {
+                                    <span class="badge bg-success">@comp.Team.Name</span>
+                                }
+                            </div>
+                            @if (!string.IsNullOrEmpty(comp.Description))
+                            {
+                                <p class="card-text text-muted small mb-0">@comp.Description</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Completed Competitions -->
+    @if (completed.Any())
+    {
+        <section>
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <i class="bi bi-check-circle text-primary fs-4"></i>
+                <h3 class="fw-bold mb-0">Прошедшие соревнования</h3>
+                <div class="section-line"></div>
+            </div>
+            <div class="list-group">
+                @foreach (var comp in completed)
+                {
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="fw-bold mb-1">@comp.Title</h6>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar me-1"></i>@comp.Date.ToString("dd.MM.yyyy")
+                                <span class="mx-2">|</span>
+                                <i class="bi bi-geo-alt me-1"></i>@comp.Location
+                            </small>
+                        </div>
+                        <span class="badge bg-primary">@comp.SportType</span>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+</div>

@@ -73,12 +73,12 @@
                             </small>
                         </div>
                         <h5 class="card-title fw-bold">@item.Title</h5>
-                        <p class="card-text text-muted flex-grow-1">@(item.Content.Length > 120 ? item.Content.Substring(0, 120) + "..." : item.Content)</p>
+                        <p class="card-text text-muted flex-grow-1">@(item.Content?.Length > 120 ? item.Content.Substring(0, 120) + "..." : item.Content)</p>
                         <div class="d-flex gap-2">
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary px-4">
                                 <i class="bi bi-book me-1"></i>Читать далее
                             </a>
-                            @if (ViewBag.IsAdmin == true)
+                            @if (Context.Session.GetString("IsAdmin") == "true")
                             {
                                 <a asp-controller="AdminNews" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">
                                     <i class="bi bi-pencil"></i>

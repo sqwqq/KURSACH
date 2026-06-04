@@ -15,8 +15,10 @@ public class AthleteController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string searchString, string sportType, string sortOrder)
+    public async Task<IActionResult> Index(string searchString, string sportType, string sortOrder, int page = 1)
     {
+        const int pageSize = 12;
+
         var sportTypes = await _context.Teams
             .Select(t => t.SportType)
             .Distinct()
@@ -29,6 +31,7 @@ public class AthleteController : Controller
         ViewBag.CurrentSort = sortOrder;
         ViewBag.NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewBag.AchievementsSort = sortOrder == "achievements" ? "achievements_desc" : "achievements";
+        ViewBag.Page = page;
 
         var athletes = _context.Athletes
             .Include(a => a.Team)
@@ -56,7 +59,13 @@ public class AthleteController : Controller
             _ => athletes.OrderBy(a => a.LastName)
         };
 
-        var result = await athletes.ToListAsync();
+        var total = await athletes.CountAsync();
+        ViewBag.TotalPages = (int)Math.Ceiling(total / (double)pageSize);
+
+        var result = await athletes
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
         return View(result);
     }
 

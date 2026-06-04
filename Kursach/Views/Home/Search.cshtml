@@ -1,0 +1,133 @@
+@model Kursach.Models.SearchResult
+@{
+    ViewData["Title"] = string.IsNullOrEmpty(Model.Query) ? "Поиск" : $"Результаты поиска: {Model.Query}";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1 class="mb-0"><i class="bi bi-search me-2"></i>Поиск</h1>
+    </div>
+</div>
+
+<div class="container">
+    <form method="get" asp-action="Search" class="mb-5">
+        <div class="input-group input-group-lg">
+            <input type="text" name="q" class="form-control" placeholder="Поиск спортсменов, новостей, достижений..." value="@Model.Query" autofocus>
+            <button type="submit" class="btn btn-warning px-4">
+                <i class="bi bi-search me-2"></i>Найти
+            </button>
+        </div>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.Query))
+    {
+        var total = Model.Athletes.Count + Model.News.Count + Model.Achievements.Count + Model.Teams.Count;
+        <p class="text-muted mb-4">Найдено <strong>@total</strong> результатов по запросу «@Model.Query»</p>
+
+        @if (total == 0)
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-search display-1 text-muted mb-3 d-block"></i>
+                <h4 class="fw-bold">Ничего не найдено</h4>
+                <p class="text-muted">Попробуйте изменить поисковый запрос</p>
+            </div>
+        }
+
+        @if (Model.Athletes.Any())
+        {
+            <h4 class="fw-bold mb-3"><i class="bi bi-people text-primary me-2"></i>Спортсмены (@Model.Athletes.Count)</h4>
+            <div class="row mb-4">
+                @foreach (var a in Model.Athletes)
+                {
+                    <div class="col-md-6 mb-2">
+                        <a asp-controller="Athlete" asp-action="Details" asp-route-id="@a.Id" class="card text-decoration-none">
+                            <div class="card-body d-flex align-items-center gap-3">
+                                @if (!string.IsNullOrEmpty(a.PhotoUrl))
+                                {
+                                    <img src="@a.PhotoUrl" alt="" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary" style="width: 50px; height: 50px;">
+                                        <span class="text-white fw-bold">@a.FirstName[0]@a.LastName[0]</span>
+                                    </div>
+                                }
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-0">@a.FirstName @a.LastName</h6>
+                                    <small class="text-muted">@a.Group | @a.Team?.SportType</small>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (Model.Teams.Any())
+        {
+            <h4 class="fw-bold mb-3"><i class="bi bi-flag text-success me-2"></i>Команды (@Model.Teams.Count)</h4>
+            <div class="row mb-4">
+                @foreach (var t in Model.Teams)
+                {
+                    <div class="col-md-6 mb-2">
+                        <a asp-controller="Team" asp-action="Details" asp-route-id="@t.Id" class="card text-decoration-none">
+                            <div class="card-body d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center justify-content-center rounded-circle bg-success" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-flag text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-0">@t.Name</h6>
+                                    <small class="text-muted">@t.SportType | Тренер: @t.CoachName</small>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (Model.Achievements.Any())
+        {
+            <h4 class="fw-bold mb-3"><i class="bi bi-trophy text-warning me-2"></i>Достижения (@Model.Achievements.Count)</h4>
+            <div class="row mb-4">
+                @foreach (var ach in Model.Achievements)
+                {
+                    <div class="col-md-6 mb-2">
+                        <div class="card">
+                            <div class="card-body d-flex align-items-center gap-3">
+                                <span class="badge bg-warning text-dark fs-6 px-3 py-2">@ach.Place</span>
+                                <div>
+                                    <h6 class="fw-bold mb-0">@ach.Title</h6>
+                                    <small class="text-muted">@ach.SportType · @ach.Date.ToString("dd.MM.yyyy")</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (Model.News.Any())
+        {
+            <h4 class="fw-bold mb-3"><i class="bi bi-newspaper text-info me-2"></i>Новости (@Model.News.Count)</h4>
+            <div class="row mb-4">
+                @foreach (var n in Model.News)
+                {
+                    <div class="col-md-6 mb-2">
+                        <a asp-controller="News" asp-action="Details" asp-route-id="@n.Id" class="card text-decoration-none">
+                            <div class="card-body d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center justify-content-center rounded bg-info bg-opacity-10" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-newspaper text-info"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-0">@n.Title</h6>
+                                    <small class="text-muted">@n.Category · @n.Date.ToString("dd.MM.yyyy")</small>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>

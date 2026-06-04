@@ -10,10 +10,12 @@ namespace Kursach.Controllers;
 public class AdminAthleteController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly IWebHostEnvironment _env;
 
-    public AdminAthleteController(AppDbContext context)
+    public AdminAthleteController(AppDbContext context, IWebHostEnvironment env)
     {
         _context = context;
+        _env = env;
     }
 
     public async Task<IActionResult> Index()
@@ -34,15 +36,28 @@ public class AdminAthleteController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Athlete athlete)
+    public async Task<IActionResult> Create(Athlete athlete, IFormFile? photo, string? photoUrl)
     {
         if (athlete.TeamId == 0)
-        {
             ModelState.AddModelError("TeamId", "Выберите команду");
-        }
 
         if (ModelState.IsValid)
         {
+            if (photo != null && photo.Length > 0)
+            {
+                var uploadsDir = Path.Combine(_env.WebRootPath, "uploads");
+                Directory.CreateDirectory(uploadsDir);
+                var fileName = Guid.NewGuid() + Path.GetExtension(photo.FileName);
+                var filePath = Path.Combine(uploadsDir, fileName);
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await photo.CopyToAsync(stream);
+                athlete.PhotoUrl = "/uploads/" + fileName;
+            }
+            else if (!string.IsNullOrWhiteSpace(photoUrl))
+            {
+                athlete.PhotoUrl = photoUrl;
+            }
+
             _context.Athletes.Add(athlete);
             await _context.SaveChangesAsync();
             TempData["Success"] = "Спортсмен успешно добавлен";
@@ -68,41 +83,46 @@ public class AdminAthleteController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Athlete athlete)
+    public async Task<IActionResult> Edit(int id, Athlete athlete, IFormFile? photo, string? photoUrl)
     {
         if (id != athlete.Id)
             return NotFound();
 
         if (athlete.TeamId == 0)
-        {
             ModelState.AddModelError("TeamId", "Выберите команду");
-        }
 
         if (ModelState.IsValid)
         {
-            try
-            {
-                var existingAthlete = await _context.Athletes.FindAsync(id);
-                if (existingAthlete == null)
-                    return NotFound();
+            var existingAthlete = await _context.Athletes.FindAsync(id);
+            if (existingAthlete == null)
+                return NotFound();
 
-                existingAthlete.FirstName = athlete.FirstName;
-                existingAthlete.LastName = athlete.LastName;
-                existingAthlete.Group = athlete.Group;
-                existingAthlete.TeamId = athlete.TeamId;
-                existingAthlete.PhotoUrl = athlete.PhotoUrl;
-                existingAthlete.Bio = athlete.Bio;
-                existingAthlete.Height = athlete.Height;
-                existingAthlete.Weight = athlete.Weight;
-
-                await _context.SaveChangesAsync();
-                TempData["Success"] = "Спортсмен успешно обновлен";
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
+            if (photo != null && photo.Length > 0)
             {
-                ModelState.AddModelError("", "Ошибка сохранения: " + ex.Message);
+                var uploadsDir = Path.Combine(_env.WebRootPath, "uploads");
+                Directory.CreateDirectory(uploadsDir);
+                var fileName = Guid.NewGuid() + Path.GetExtension(photo.FileName);
+                var filePath = Path.Combine(uploadsDir, fileName);
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await photo.CopyToAsync(stream);
+                existingAthlete.PhotoUrl = "/uploads/" + fileName;
             }
+            else if (!string.IsNullOrWhiteSpace(photoUrl))
+            {
+                existingAthlete.PhotoUrl = photoUrl;
+            }
+
+            existingAthlete.FirstName = athlete.FirstName;
+            existingAthlete.LastName = athlete.LastName;
+            existingAthlete.Group = athlete.Group;
+            existingAthlete.TeamId = athlete.TeamId;
+            existingAthlete.Bio = athlete.Bio;
+            existingAthlete.Height = athlete.Height;
+            existingAthlete.Weight = athlete.Weight;
+
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Спортсмен успешно обновлен";
+            return RedirectToAction(nameof(Index));
         }
         ViewBag.Teams = new SelectList(_context.Teams.OrderBy(t => t.Name).ToList(), "Id", "Name");
         return View(athlete);

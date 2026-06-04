@@ -14,20 +14,23 @@
                 </h4>
             </div>
             <div class="card-body">
-                <form asp-action="Edit" method="post">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
                     @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                     <input type="hidden" asp-for="Id" />
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Имя</label>
                                 <input asp-for="FirstName" class="form-control" required>
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Фамилия</label>
                                 <input asp-for="LastName" class="form-control" required>
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
                             </div>
                         </div>
                     </div>
@@ -36,6 +39,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Группа</label>
                                 <input asp-for="Group" class="form-control" required>
+                                <span asp-validation-for="Group" class="text-danger small"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -44,12 +48,30 @@
                                 <select asp-for="TeamId" class="form-select" asp-items="ViewBag.Teams" required>
                                     <option value="">-- Выберите команду --</option>
                                 </select>
+                                <span asp-validation-for="TeamId" class="text-danger small"></span>
                             </div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Фото (URL)</label>
-                        <input asp-for="PhotoUrl" class="form-control">
+                        <label class="form-label">Фото (выберите файл или укажите URL)</label>
+                        <input type="file" name="photo" class="form-control" accept="image/*" id="photoFile">
+                        <div class="mt-2 text-center" id="previewContainer" style="display:none;">
+                            <img id="photoPreview" src="" alt="" class="rounded border" style="max-height: 150px;">
+                            <button type="button" class="btn btn-sm btn-outline-danger mt-1" onclick="clearPhoto()">Удалить</button>
+                        </div>
+                        <div class="mt-2">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-link"></i></span>
+                                <input type="text" name="photoUrl" class="form-control" placeholder="Или вставьте URL фото..." value="@Model.PhotoUrl">
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                        {
+                            <div class="mt-2 text-center">
+                                <img src="@Model.PhotoUrl" alt="" class="rounded border" style="max-height: 100px;">
+                                <small class="text-muted d-block">Текущее фото</small>
+                            </div>
+                        }
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Биография</label>
@@ -80,3 +102,32 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById('photoFile').addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(ev) {
+                    var img = document.getElementById('photoPreview');
+                    img.src = ev.target.result;
+                    document.getElementById('previewContainer').style.display = 'block';
+                    document.querySelector('[name="photoUrl"]').value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        function clearPhoto() {
+            document.getElementById('photoFile').value = '';
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('photoPreview').src = '';
+        }
+        document.querySelector('[name="photoUrl"]').addEventListener('input', function() {
+            if (this.value) {
+                document.getElementById('photoFile').value = '';
+                document.getElementById('previewContainer').style.display = 'none';
+            }
+        });
+    </script>
+}

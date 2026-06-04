@@ -5,9 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var dbPath = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "CollegeSports.db");
+Directory.CreateDirectory(Path.GetDirectoryName(dbPath) ?? "App_Data");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlite($"Data Source={dbPath}"));
 
 // 1. Регистрируем сервис сессий
 builder.Services.AddSession();
@@ -23,6 +24,9 @@ using (var scope = app.Services.CreateScope())
 
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseExceptionHandler("/error");
+app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 // 2. Включаем middleware сессий
 app.UseSession();
